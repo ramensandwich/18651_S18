@@ -4,7 +4,6 @@ kmeans.py
 Performs kmeans clustering using Lloyd's algorithm.
 
 
-
 """
 
 from random import random
@@ -16,44 +15,55 @@ import numpy as np
             #red,      orange,    yellow,    green,     blue,   purple,     brown,      black,      aqua
 COLORS = ['#FF0000', '#FF6600', '#FFFF00', '#00FF00', '#0000FF', '#8000FF', '#663300', '#FFFFFF', "#00FFFF"]
 
-
 """
 Function: GetDistance
-Returns the Euclidean distance between the two points
+Returns the distance as a function of Euclidean distance and expected spending of customer.
+Note: Expected spending of customer is an exponential decay function based on distance.
 
 """
 def GetDistance(pointA, pointB):
     return ((pointA[0] - pointB[0])**2 + (pointA[1] - pointB[1])**2)**0.5
 
 
+def GetExpectedSpending(centroid, customer):
+    #Expected spending = Average customer spending per day * e ** (-lamda * distance)
+    #0.0150 was calculated using exponential decay. Users reported willing to go 200ft to go to a vending machine
+    return customer[2] * np.exp( - 0.0150 * GetDistance(centroid, customer))
 
-def AssignPoints(k, centroids, points):
-    for point in points:
+
+#Return the expected profit of the given assignment
+def AssignPoints(k, centroids, customers):
+    expectedProfit = 0
+
+    for customer in customers:
         closest = 0
         closestDistance = 99999
         for i in xrange(k):
-            distance = GetDistance(centroids[i], point)
+            distance = GetDistance(centroids[i], customer)
             if (distance < closestDistance):
                 closestDistance = distance
                 closest = i
-        #Points are [x, y, k], where x and y are coordinates and k is grouping
-        point[2] = closest
+        #Customers are [x, y, value, k], where x and y are coordinates, value is daily spending, and k is grouping
+        customer[3] = closest
+        expectedProfit += GetExpectedSpending(centroids[closest], customer)
+
+    return expectedProfit
 
 
 # Function: UpdateCentroid
 # Performs the update step in Lloyd's algorithm. Moves centroids
-def UpdateCentroid(k, centroids, points):
-    #initialize sum
+def UpdateCentroid(k, centroids, customers):
+    #initialize sum [sum of x, sum of y, number of customers]
     centroidSum = []
     netDelta = 0
 
     for i in xrange(k):
         centroidSum.append([0,0,0])
 
-    for point in points:
-        centroidSum[point[2]][0] += point[0]
-        centroidSum[point[2]][1] += point[1]
-        centroidSum[point[2]][2] += 1
+    for customer in customers:
+        centroidSum[customer[3]][0] += customer[0]
+        centroidSum[customer[3]][1] += customer[1]
+        centroidSum[customer[3]][2] += 1
 
     for i in xrange(k):
         newX = centroidSum[i][0]/centroidSum[i][2]
@@ -70,56 +80,60 @@ def UpdateCentroid(k, centroids, points):
 #
 # Args:
 # k: Number of desired clusters
-# points: List of [x,y] coordinate pairs
-def Kmeans(k, points):
+# customers: List of [x, y, value], where x and y are coordinates and value is the customer's daily spending
+#
+# Returns:
+# A list of [x,y] coordinate pairs for the centroids
+def Kmeans(k, customers):
+
+    #Append the fourth value to the customer tuple to track which grouping the customer belongs to
+    for i in xrange(len(customers)):
+        customers[i] = [customers[i][0], customers[i][1], customers[i][2], 0]
+
+
     #Randomly initialize our k centroids
-
-    for i in xrange(len(points)):
-        points[i] = [points[i][0], points[i][1], 0]
-
     centroids = []
     for i in xrange(k):
-        centroids.append([random(), random()])
+        centroids.append([83 * random(), 55 * random()])
 
-    x = range(1)
-    y = range(1)
     fig = plt.figure()
     ax1 = fig.add_subplot(111)
-    ax1.axis([0, 1, 0, 1])
+    ax1.axis([0, 83, 0, 55])
 
 
-    #print("Centroids: ")
-    #print(centroids)
-    AssignPoints(k, centroids, points)
+    expectedProfit = AssignPoints(k, centroids, customers)
+    print("Original expected profit: " + str(expectedProfit))
     distance = 100
 
-    px, py, z = zip(*points)
-    #ax1.scatter(list(px), list(py), c=COLORS[4], alpha = 0.5)
-
     while (distance > 0.05):
-        #unzippedCentroids = zip(*centroids)
-        #unzippedPoints = zip(*points)
-        #plt.scatter(*zip(*centroids))
         cx, cy = zip(*centroids)
-        ax1.scatter(list(cx), list(cy), c=COLORS[0], marker='*')
         for i in xrange(k):
-            filteredPoints = [x for x in points if x[2] == i]
-            px, py, pk = zip(*filteredPoints)
-            ax1.scatter(list(px), list(py), c=COLORS[i], alpha=0.5)
+            filteredPoints = [x for x in customers if x[3] == i]
+            if len(filteredPoints) == 0: continue
+            px, py, pv, pk = zip(*filteredPoints)
+            ax1.scatter(list(px), list(py), c=COLORS[i], alpha=0.1)
+        ax1.scatter(list(cx), list(cy), c=COLORS[0], marker='*')
 
-        #plt.scatter(unzippedCentroids, COLORS[0], unzippedPoints, COLORS[4])
+        #Slowdown the redraw rate to make the visualizer easier to follow
         plt.pause(1)
+
+        #Reset the window 
         plt.clf()
         ax1 = fig.add_subplot(111)
-        ax1.axis([0, 1, 0, 1])
-        AssignPoints(k, centroids, points)
-        distance = UpdateCentroid(k, centroids, points)
+        ax1.axis([0, 83, 0, 55])
+        ax1.set_xlabel("Grid X coordinate")
+        ax1.set_ylabel("Grid Y coordinate")
+
+        expectedProfit = AssignPoints(k, centroids, customers)
+        distance = UpdateCentroid(k, centroids, customers)
         print("Distance: " + str(distance))
+        print("Expected profit: " + str(expectedProfit))
         #vor = Voronoi(np.array(centroids))
         #fig = voronoi_plot_2d(vor)
 
 
+    plt.gca().invert_yaxis()
     plt.show()
 
-
+    return centroids
 
