@@ -66,6 +66,11 @@ def UpdateCentroid(k, centroids, customers):
         centroidSum[customer[3]][2] += 1
 
     for i in xrange(k):
+        #If no points were assigned to this centroid, it was placed in a bad spot. Replace it.
+        if (centroidSum[i][2] == 0):
+            centroids[i][0] = 83 * random()
+            centroids[i][1] = 55 * random()
+            continue
         newX = centroidSum[i][0]/centroidSum[i][2]
         newY = centroidSum[i][1]/centroidSum[i][2]
         netDelta += abs(centroids[i][0] - newX)
@@ -89,7 +94,6 @@ def Kmeans(k, customers):
     #Append the fourth value to the customer tuple to track which grouping the customer belongs to
     for i in xrange(len(customers)):
         customers[i] = [customers[i][0], customers[i][1], customers[i][2], 0]
-
 
     #Randomly initialize our k centroids
     centroids = []
