@@ -38,13 +38,13 @@ def main():
 
     customerValue = [0]*1000
 
-    pointsFile = open('/Users/Sean/Desktop/Classes/18651/Data/points.json')
-    breakfastMovementFile = open('/Users/Sean/Desktop/Classes/18651/Data/breakfast.json')
-    breakfastPurchaseFile = open('/Users/Sean/Desktop/Classes/18651/Data/breakfastbuy.json')
-    lunchMovementFile = open('/Users/Sean/Desktop/Classes/18651/Data/lunch.json')
-    lunchPurchaseFile = open('/Users/Sean/Desktop/Classes/18651/Data/lunchbuy.json')
-    dinnerMovementFile = open('/Users/Sean/Desktop/Classes/18651/Data/dinner.json')
-    dinnerPurchaseFile = open('/Users/Sean/Desktop/Classes/18651/Data/dinnerbuy.json')
+    pointsFile = open('../data/points.json')
+    breakfastMovementFile = open('../data/breakfast.json')
+    breakfastPurchaseFile = open('../data/breakfastbuy.json')
+    lunchMovementFile = open('../data/lunch.json')
+    lunchPurchaseFile = open('../data/lunchbuy.json')
+    dinnerMovementFile = open('../data/dinner.json')
+    dinnerPurchaseFile = open('../data/dinnerbuy.json')
 
     breakfastPurchaseData = json.load(breakfastPurchaseFile)["data"]
     for purchase in breakfastPurchaseData:

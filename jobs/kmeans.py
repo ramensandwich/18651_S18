@@ -103,7 +103,7 @@ def Kmeans(k, customers):
     fig = plt.figure()
     ax1 = fig.add_subplot(111)
 
-    campus_map = plt.imread('/Users/Sean/Desktop/Classes/18651/Data/campus_map.png')
+    campus_map = plt.imread('../media/campus_map.png')
     ax1.imshow(campus_map, extent=[0, 83, 0, 55])
 
     expectedProfit = AssignPoints(k, centroids, customers)

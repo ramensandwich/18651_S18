@@ -7,9 +7,9 @@ COLORS = ['#FF0000', '#FF6600', '#FFFF00', '#00FF00', '#0000FF', '#8000FF', '#66
 
 def main():
 
-    pointsFile = open('/Users/Sean/Desktop/Classes/18651/Data/points.json')
-    breakfastMovementFile = open('/Users/Sean/Desktop/Classes/18651/Data/breakfast.json')
-    campus_map = plt.imread('/Users/Sean/Desktop/Classes/18651/Data/campus_map.png')
+    pointsFile = open('../data/points.json')
+    breakfastMovementFile = open('../data/breakfast.json')
+    campus_map = plt.imread('../media/campus_map.png')
 
     fig = plt.figure()
     ax1 = fig.add_subplot(111)
