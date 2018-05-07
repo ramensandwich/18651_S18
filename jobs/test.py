@@ -1,13 +1,3 @@
-# import numpy as np
-# import matplotlib.pyplot as plt
-
-# N = 50
-# x = np.random.rand(N)
-# y = np.random.rand(N)
-# z = int(np.random.rand(N)*3);
-
-# plt.scatter(x, y)
-# plt.show()
 from random import random
 import numpy as np
 import json
@@ -21,21 +11,6 @@ COLORS = ['#FF0000', '#FF6600', '#FFFF00', '#00FF00', '#0000FF', '#8000FF', '#66
 #Note: We use kmeans instead of EM because we want to hard assign a machine to a person. A person 
 #   spends money only at one machine at a given time
 def main():
-    #TEST CODE
-    #points = np.random.rand(5000,2)
-    
-    # points = []
-    # for i in xrange(5000):
-    #     points.append([40*random(), 20*random(), 1])
-
-    # for i in xrange(5000):
-    #   points.append([43*random() + 40, 25*random() + 20, 1])
-
-    # k = 2
-
-    # Kmeans(k, points)
-
-
     customerValue = [0]*1000
 
     pointsFile = open('../data/points.json')
@@ -68,8 +43,6 @@ def main():
         dataset.append([int(customer["X"]), - int(customer["Y"]) + 55, customerValue[int(customer["ID"])]])
     print("Done!")
 
-
-#    Kmeans(2, dataframe[dataframe.columns[2:4]])
     Kmeans(4, dataset)
 
 

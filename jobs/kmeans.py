@@ -3,7 +3,6 @@ kmeans.py
 
 Performs kmeans clustering using Lloyd's algorithm.
 
-
 """
 
 from random import random
@@ -120,7 +119,7 @@ def Kmeans(k, customers):
         ax1.scatter(list(cx), list(cy), c=COLORS[0], marker='*')
 
         #Slowdown the redraw rate to make the visualizer easier to follow
-        plt.pause(1)
+        plt.pause(0.1)
 
         #Reset the window 
         plt.clf()
@@ -133,9 +132,6 @@ def Kmeans(k, customers):
         distance = UpdateCentroid(k, centroids, customers)
         print("Distance: " + str(distance))
         print("Expected profit: " + str(expectedProfit))
-        #vor = Voronoi(np.array(centroids))
-        #fig = voronoi_plot_2d(vor)
-
 
     plt.gca().invert_yaxis()
     plt.show()
