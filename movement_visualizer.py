@@ -1,7 +1,6 @@
 import json
 import matplotlib.pyplot as plt
 import pandas as pd
-import matplotlib.image as mpimg
 
 COLORS = ['#FF0000', '#FF6600', '#FFFF00', '#00FF00', '#0000FF', '#8000FF', '#663300', '#FFFFFF', "#00FFFF"]
 

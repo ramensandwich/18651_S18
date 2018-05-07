@@ -12,8 +12,8 @@ from scipy.spatial import Voronoi, voronoi_plot_2d
 import numpy as np
 
 
-            #red,      orange,    yellow,    green,     blue,   purple,     brown,      black,      aqua
-COLORS = ['#FF0000', '#FF6600', '#FFFF00', '#00FF00', '#0000FF', '#8000FF', '#663300', '#FFFFFF', "#00FFFF"]
+            #red,       blue,       yellow,    green,   orange,      purple,     brown,      black,      aqua
+COLORS = ['#FF0000', '#0000FF',  '#FFFF00', '#00FF00', '#FF6600', '#8000FF', '#663300', '#FFFFFF', "#00FFFF"]
 
 """
 Function: GetDistance
@@ -102,8 +102,9 @@ def Kmeans(k, customers):
 
     fig = plt.figure()
     ax1 = fig.add_subplot(111)
-    ax1.axis([0, 83, 0, 55])
 
+    campus_map = plt.imread('/Users/Sean/Desktop/Classes/18651/Data/campus_map.png')
+    ax1.imshow(campus_map, extent=[0, 83, 0, 55])
 
     expectedProfit = AssignPoints(k, centroids, customers)
     print("Original expected profit: " + str(expectedProfit))
@@ -124,7 +125,7 @@ def Kmeans(k, customers):
         #Reset the window 
         plt.clf()
         ax1 = fig.add_subplot(111)
-        ax1.axis([0, 83, 0, 55])
+        ax1.imshow(campus_map, extent=[0, 83, 0, 55])
         ax1.set_xlabel("Grid X coordinate")
         ax1.set_ylabel("Grid Y coordinate")
 

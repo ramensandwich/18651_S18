@@ -61,15 +61,16 @@ def main():
 
     dataset = []
 
-    i = 0
+    print("Loading dataset...")
     lunchMovementsData = json.load(lunchMovementFile)["data"]
     for customer in lunchMovementsData:
-        dataset.append([int(customer["X"]), int(customer["Y"]), customerValue[int(customer["ID"])]])
-        i += 1
-        if i == 100000:
-            break
+        #Data is in x,y. We want row,col
+        dataset.append([int(customer["X"]), - int(customer["Y"]) + 55, customerValue[int(customer["ID"])]])
+    print("Done!")
 
-    Kmeans(2, dataset)
+
+#    Kmeans(2, dataframe[dataframe.columns[2:4]])
+    Kmeans(4, dataset)
 
 
 
