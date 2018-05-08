@@ -11,7 +11,7 @@ Contains all of the JSON files that were output by the simulator and are needed 
 
 ## jobs
 
-Contains the python scripts for visualizing our data and finding optimal vending machine placement.
+Contains the python scripts for visualizing our data and finding optimal vending machine placement. These programs all require python 2.7, matplotlib, numpy, and pandas.
 
 ### movement_visualizer.py
 This job visualizes our movement dataset to allow us to verify that customer movement is realistic in our simulation. It renders the simulation's points of interest and animates user motion at a timestep of 5 seconds. To change the dataset, change the input to the breakfastMovementFile variable.
