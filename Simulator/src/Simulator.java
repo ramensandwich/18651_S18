@@ -20,6 +20,7 @@ public class Simulator {
     private ArrayList<VendNode> vendors;
     private VendMap vmap;
 
+    //Create output structures and writers
     JSONArray buyB = new JSONArray();
     JSONArray buyL = new JSONArray();
     JSONArray buyD = new JSONArray();
@@ -52,6 +53,7 @@ public class Simulator {
        PrintWriter objP = new PrintWriter(fosP);
        JSONObject pointobj = new JSONObject();
        JSONArray pointarr = new JSONArray();
+       //Add points of interest to map
        for(POI p : points){
            Point loc = p.getLoc();
            JSONObject obj = new JSONObject();
@@ -59,6 +61,7 @@ public class Simulator {
            obj.put("Y", Integer.toString(loc.y));
            pointarr.add(obj);
        }
+       //Add points of interest to output file
        pointobj.put("Points", pointarr);
        objP.write(pointobj.toString());
        objP.close();
@@ -94,6 +97,7 @@ public class Simulator {
         int x = 0;
         int y = 0;
         if(ID == 0){
+            //Ensure Vendor 0 goes to UC Black Chairs. This is the control vendor.
             x = POI.BLACKCHAIRS.getLoc().x;
             y = POI.BLACKCHAIRS.getLoc().y;
         } else {
@@ -119,19 +123,24 @@ public class Simulator {
             ID = c.getID();
             Purchase buy = c.getLastBuy();
 
+            //Report client positions
             JSONObject obj = new JSONObject();
             obj.put("X", Integer.toString(x));
             obj.put("Y", Integer.toString(y));
             obj.put("ID", Integer.toString(ID));
             obj.put("Tick", Integer.toString(ticknum));
             if(ticknum >= 5400 && ticknum < 6120){
+                //Write to breakfast output file
                 dataB.add(obj);
             } else if(ticknum >= 8280 && ticknum < 9000){
+                //Write to lunch output file
                 dataL.add(obj);
             } else if(ticknum >= 13320 && ticknum < 14040){
+                //Write to dinner output file
                 dataD.add(obj);
             }
 
+            //Report vendor transactions
             if(buy != null){
 
                 JSONObject objbuy = new JSONObject();
@@ -141,10 +150,13 @@ public class Simulator {
                 objbuy.put("Price", Double.toString(buy.price));
                 objbuy.put("Tick", Integer.toString(ticknum));
                 if(ticknum >= 5400 && ticknum < 6120){
+                //Write to breakfast output file
                     buyB.add(objbuy);
                 } else if(ticknum >= 8280 && ticknum < 9000){
+                //Write to lunch output file
                     buyL.add(objbuy);
                 } else if(ticknum >= 13320 && ticknum < 14040){
+                //Write to dinner output file
                     buyD.add(objbuy);
                 }
             }
@@ -154,6 +166,7 @@ public class Simulator {
             VendNode v = vendors.get(i);
             v.tick();
             StringBuilder sp = new StringBuilder();
+            //Write sales, prices, and stock to output file
             if(i == 0){
                 priceA.println(Double.toString(v.getPrice()));
                 salesA.println(Integer.toString(v.getSales()));
@@ -167,6 +180,7 @@ public class Simulator {
     }
 
     public void endSim(){
+        //Close all output streams
         JSONObject objB = new JSONObject();
         JSONObject objL = new JSONObject();
         JSONObject objD = new JSONObject();

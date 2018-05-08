@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 /**
  * Created by bradp on 4/12/2018.
+ * Map cell. Container for Point.
  */
 public class Cell {
     private int x;

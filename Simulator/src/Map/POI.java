@@ -9,6 +9,7 @@ import java.util.Collections;
 
 /**
  * Created by bradp on 4/12/2018.
+ * Enum of all points of interest. When adding new point, ensure that it's ID is unique.
  */
 public enum POI {
     RASHID(23,13,0,"Rashid Auditorium"),
@@ -85,12 +86,14 @@ public enum POI {
     }
 
     public POI getRandomUGHouse(){
+        //Get Undergraduate housing
         ArrayList<POI> houses = new ArrayList<>(Arrays.asList(STEVER,DONNER,MOREWOOD_E,MUDGE,HILL));
         Collections.shuffle(houses);
         return houses.get(0);
     }
 
     public POI getRandomGradHouse(){
+        //Get Graduate housing
         ArrayList<POI> houses = new ArrayList<>(Arrays.asList(BUSSTOP,RESNIK,WESTWING,GREEKQUAD,MOREWOOD_G,DOHERTY));
         Collections.shuffle(houses);
         return houses.get(0);

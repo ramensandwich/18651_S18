@@ -10,6 +10,7 @@ import java.util.Random;
 
 /**
  * Created by bradp on 2/27/2018.
+ * Client node
  */
 public class ClientNode extends Node {
     private Profile prof;
@@ -44,20 +45,17 @@ public class ClientNode extends Node {
         this.backVend = false;
         this.recent = false;
         this.maxRange = rand.nextInt(10);
+        //Set max range willing to go to vendor
         while(this.maxRange < 4){
             this.maxRange = rand.nextInt(10);
         }
+        //Set student type. 
         int index = ID % 14;
         for(StudentType type : StudentType.values()){
             if(type.getID() == index){
                 this.type = type;
                 points.addAll(type.getPoints());
                 points.add(type.getHome());
-                /*if(ID == 0){
-                    for(POI p : this.points){
-                        System.out.printf("POI: %s\n", p.getName());
-                    }
-                }*/
             }
         }
     }
@@ -77,9 +75,6 @@ public class ClientNode extends Node {
 
     public void tick(int ticknum, ArrayList<VendNode> vendors){
         Random rand = new Random();
-       /* if(this.getID() == 0){
-            System.out.printf("X = %d, Y = %d\n", this.location.x, this.location.y);
-        }*/
         if(this.recent){
             if(this.recentCount < 100){
                 this.recentCount += 1;
@@ -89,11 +84,12 @@ public class ClientNode extends Node {
             }
         }
 
+        //If not going to vendor and not returning from vendor
         if(!this.toVend && !this.backVend){
+            //See if roll determines that we want to go to a vendor
             if(prof.getVend(ticknum)){
                 this.venddest = this.findVendor(vendors);
                 if(this.venddest != null){
-                    //System.out.println("Heading to Vendor");
                     this.toVend = true;
                 }
             } else {
@@ -106,7 +102,9 @@ public class ClientNode extends Node {
 
     private void handleVend(){
         if(this.toVend){
+            //Heading to vendor
             if(this.venddest.getLocation().equals(this.location)){
+                //Arrived at vendor
                 this.makePurchase(this.venddest);
                 this.toVend = false;
                 this.venddest = null;
@@ -114,7 +112,9 @@ public class ClientNode extends Node {
                 this.moveToDest(venddest.getLocation());
             }
         } else {
+            //Returning from vendor
             if(this.destination.getLoc().equals(this.location)){
+                //Arrived back
                 this.backVend = false;
                 this.transit = false;
                 this.atdest = true;
@@ -126,9 +126,11 @@ public class ClientNode extends Node {
 
     private void handleDest(){
         if(this.destination == null){
+            //Startup state
             this.destination = this.points.get(0);
             this.transit = true;
         } else if(this.transit){
+            //Heading to destination
             if(this.destination.getLoc().equals(this.location)){
                 this.transit = false;
                 this.atdest = true;
@@ -137,15 +139,16 @@ public class ClientNode extends Node {
             }
         } else if(this.atdest) {
             if(this.timeAtDest < this.cooldown){
+                //Countdown until next move
                 this.timeAtDest += 1;
             } else {
+                //Choose new destination from list
                 Random rand = new Random();
                 this.transit = true;
                 this.atdest = false;
                 POI next = this.points.get(rand.nextInt(this.points.size()));
                 while(next.getID() == this.destination.getID()){
                     next = this.points.get(rand.nextInt(this.points.size()));
-                    //System.out.printf("New Dest: %s\n", next.getName());
                 }
                 this.destination = next;
                 this.timeAtDest = 0;
@@ -158,7 +161,7 @@ public class ClientNode extends Node {
         int ya = location.y;
         int xb = p.x;
         int yb = p.y;
-
+        //Move via Manhattan distances. 
 
         if(Math.abs(xa-xb) >= Math.abs(ya-yb)){
             if(xa > xb){
@@ -184,6 +187,8 @@ public class ClientNode extends Node {
         int min = -1;
         int manhattan;
 
+        //Pick nearest vendor from list of vendors in map
+        //Client knows of all vendors because theoretical app
         for(int i = 0; i < vendors.size(); i++){
             vtemp = vendors.get(i);
             vpoint = vtemp.getLocation();
@@ -208,6 +213,7 @@ public class ClientNode extends Node {
         int roll;
         double price;
 
+        //Make purchase if roll indicates
         for(Stock s : options){
             roll = rand.nextInt(100);
             if(this.prof.getItem(s, roll, this.recent)){
@@ -221,6 +227,7 @@ public class ClientNode extends Node {
     }
 
     public Purchase getLastBuy(){
+        //Report purchase for logging
         Purchase buy = null;
         if(this.lastbuy != null){
             buy = new Purchase(lastbuy.clientID, lastbuy.vendorID, lastbuy.name, lastbuy.price);

@@ -2,6 +2,7 @@ package Node;
 
 /**
  * Created by bradp on 2/27/2018.
+ * Node abstract class
  */
 public abstract class Node {
     private int ID = -1;

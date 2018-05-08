@@ -2,6 +2,7 @@ package Node;
 
 /**
  * Created by bradp on 4/24/2018.
+ * Stock enum. Expiration currently does not do anything. 
  */
 public enum Stock {
     DORITOS (-1, 1.00),

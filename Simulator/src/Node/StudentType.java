@@ -8,6 +8,7 @@ import java.util.Collections;
 
 /**
  * Created by bradp on 5/1/2018.
+ * Types of students for the purpose of determining points of interest
  */
 public enum StudentType {
     CFA_F(true,0,new POI[] {POI.CFA, POI.BLACKCHAIRS, POI.MCCONOMY, POI.WEIGAND, POI.B136}),
@@ -46,6 +47,7 @@ public enum StudentType {
         ArrayList<POI> temppoints = new ArrayList<>(this.points);
         ArrayList<POI> newpoints = new ArrayList<>();
         Collections.shuffle(temppoints);
+        //Get 5 random points of interest from list
         for(int i = 0; i < 5; i++){
             newpoints.add(temppoints.get(i));
         }
@@ -54,6 +56,7 @@ public enum StudentType {
 
     public POI getHome(){
         POI p;
+        //Get a home from list depending on grad status
         if(this.freshman){
             ArrayList<POI> houses = new ArrayList<>(Arrays.asList(POI.STEVER,POI.DONNER,POI.MOREWOOD_E,POI.MUDGE,POI.HILL));
             Collections.shuffle(houses);

@@ -10,8 +10,10 @@ import java.io.PrintWriter;
 public class Main {
 
     public static void main(String[] args) throws IOException {
+        //Number of clients, number of vendors, x dimension, y dimension
         Simulator sim  = new Simulator(1000, 20,84,56);
 
+        //Clear output files for writing
         PrintWriter printB = new PrintWriter(new File("breakfast.json"));
         PrintWriter printL = new PrintWriter(new File("lunch.json"));
         PrintWriter printD = new PrintWriter(new File("dinner.json"));
@@ -37,7 +39,7 @@ public class Main {
         priceA.close();
         salesA.close();
 
-        //17280
+        //17280 is for full day. Each tick represents 5 seconds. 
         for(int i = 0; i < 17280; i++){
             sim.tick(i);
         }

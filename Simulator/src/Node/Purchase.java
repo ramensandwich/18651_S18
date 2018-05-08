@@ -9,6 +9,7 @@ public class Purchase {
     public String name;
     public double price;
 
+    //Purchase class for the purpose of logging.
     public Purchase(int clientID, int vendorID, String name, double price){
         this.clientID = clientID;
         this.vendorID = vendorID;

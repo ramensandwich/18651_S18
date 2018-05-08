@@ -7,6 +7,7 @@ import java.util.Map;
 
 /**
  * Created by bradp on 2/27/2018.
+ * Vendor node
  */
 public class VendNode extends Node {
     private Map<Stock, Integer> currStock;
@@ -34,6 +35,7 @@ public class VendNode extends Node {
         this.expectedsales = 1;
         this.price = 1.0;
         this.gain = 1.00;
+        //Equal stock state
         for(Stock s : Stock.values()){
             this.currStock.put(s, 25);
             this.currSales.put(s, 0);
@@ -55,13 +57,11 @@ public class VendNode extends Node {
         int sales;
         int amount;
 
-        if(getID() == 0){
-            //System.out.println("Sale!");
-        }
-
+        //Implement a purchase
         temp = currStock.get(item);
         temp -= count;
         amount = count;
+        //If we are out, don't decrement
         if(temp < 0){
             amount = currStock.get(item);
             temp = 0;
@@ -98,7 +98,7 @@ public class VendNode extends Node {
 
         diff = this.capacity - this.stockHeld;
         portion = diff/((double)this.capacity);
-        //System.out.printf("Restock! Diff = %f, Portion = %f\n", diff, portion);
+        //Restock according to portion of total sales and portion of own stock sold
         for(Stock s : Stock.values()){
             itemsales = (double)this.currSales.get(s);
             itemnum = (double)this.currPortion.get(s);
@@ -107,7 +107,6 @@ public class VendNode extends Node {
             portiondiff = (saleportion - itemportion);
             itemdiff = portion * itemnum * portiondiff * 2;
             newnum = (int)(itemdiff + itemnum + 0.5);
-            //System.out.printf("Item Sales: %f, Item Portion: %f, Item Difference: %f, New Portion: %d\n", itemsales, itemportion, itemdiff, newnum);
             this.currPortion.put(s, newnum);
             if(this.currStock.get(s) < newnum){
                 this.currStock.put(s,newnum);
@@ -174,27 +173,26 @@ public class VendNode extends Node {
         int diff = this.totalsales - this.expectedsales;
         double newdiff = 0.0;
 
-
+        //Determine percentile difference between total sales and expected sales
         diffratio = (((double)this.totalsales) - ((double)this.expectedsales)) / ((double)this.expectedsales);
         capratio = ((double)this.expectedsales) / ((double)this.capacity);
 
+        //Average previous gain with new gain
         newdiff = (((double)diff) + this.gain) / 2.0;
 
         newprice = this.price + (diffratio * capratio * this.price);
         this.price = newprice;
+        //Floor for price. Below this is too low to be profitable
         if(this.price < 0.5){
             this.price = 0.5;
         }
-        if(getID() == 0){
-            System.out.printf("Price adjust! %d, %d, %f\n", this.totalsales, this.expectedsales, this.price);
-        }
         this.expectedsales += (int)(newdiff);
+        //Always expect to sell something
         if(this.expectedsales < 1){
             this.expectedsales = 1;
         }
 
         this.totalsales = 0;
         this.gain = diff;
-
     }
 }
