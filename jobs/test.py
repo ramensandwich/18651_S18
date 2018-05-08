@@ -1,16 +1,12 @@
 from random import random
-import numpy as np
 import json
-import matplotlib.pyplot as plt
 from kmeans import Kmeans
-
-
-COLORS = ['#FF0000', '#FF6600', '#FFFF00', '#00FF00', '#0000FF', '#8000FF', '#663300', '#FFFFFF', "#00FFFF"]
 
 
 #Note: We use kmeans instead of EM because we want to hard assign a machine to a person. A person 
 #   spends money only at one machine at a given time
 def main():
+    #In our dataset, our customers are id'd 0 to 999. Adjust this if dataset changes number of clients
     customerValue = [0]*1000
 
     pointsFile = open('../data/points.json')
@@ -37,6 +33,7 @@ def main():
     dataset = []
 
     print("Loading dataset...")
+    #Change the line below to use a different dataset
     lunchMovementsData = json.load(lunchMovementFile)["data"]
     for customer in lunchMovementsData:
         #Data is in x,y. We want row,col

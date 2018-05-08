@@ -8,6 +8,7 @@ COLORS = ['#FF0000', '#FF6600', '#FFFF00', '#00FF00', '#0000FF', '#8000FF', '#66
 def main():
 
     pointsFile = open('../data/points.json')
+    #Change the below line to use a different dataset
     breakfastMovementFile = open('../data/breakfast.json')
     campus_map = plt.imread('../media/campus_map.png')
 
@@ -24,7 +25,7 @@ def main():
     poiY = pointsOfInterest["Y"].apply(lambda y : -y + 55)
     ax1.scatter(poiX, poiY, c="#000000", marker="*")
 
-    #TODO; Replace 1000 with actual total time value
+    #We currently only run for 1000 timesteps, or about 1000*5seconds = about 1.5 hours in simulation time
     for i in xrange(1000):
         chunk = dataframe[dataframe.Tick == (5400 + i)]
         x = chunk["X"]
